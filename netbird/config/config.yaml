@@ -1,0 +1,16 @@
+server:
+  listenAddress: ":8080"
+  exposedAddress: "http://nb-server:8080"
+  healthcheckAddress: ":9000"
+  metricsPort: 9090
+  logLevel: "info"
+  logFile: "console"
+  authSecret: "bench-relay-secret"
+  dataDir: "/nb/data"
+  # Non-default: no phone-home, no GeoLite download (no internet on wan).
+  disableAnonymousMetrics: true
+  disableGeoliteUpdate: true
+  auth:
+    issuer: "http://localhost:8080/oauth2"
+  store:
+    engine: "sqlite"

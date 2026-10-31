@@ -1,0 +1,5 @@
+export PRIVATE_TARGET=10.89.0.10
+export SERVER_CONTAINERS=""
+export SITE_CONTAINER=target
+export CLIENT_CONTAINER=client-tools
+export WAN_PREFIX=10.89.0.

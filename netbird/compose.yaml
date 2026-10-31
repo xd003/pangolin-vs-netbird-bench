@@ -1,0 +1,129 @@
+# NetBird 0.82.0 benchmark topology. Compose project: nb.
+# Driven by up.sh / down.sh / env.sh. Variables (exported by up.sh/env.sh):
+#   NET_ID       subnet index X: wan 10.88.X.0/24, sitelan 10.89.X.0/24 (default 0)
+#   NAME_SUFFIX  appended to container_name (default empty; dev uses -nbdev)
+#   NB_PROXY_TOKEN, SITE_SETUP_KEY, CLIENT_SETUP_KEY  generated during up.sh
+#   NB_FORCE_RELAY=true   -> RELAY=1 variant (relay path for site and client)
+#   NB_WG_KERNEL_DISABLED=true -> WG_USERSPACE=1 variant (site and client)
+name: nb
+
+networks:
+  wan:
+    ipam:
+      config:
+        - subnet: 10.88.${NET_ID:-0}.0/24
+  sitelan:
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.89.${NET_ID:-0}.0/24
+
+# Named volumes (removed by `docker compose down -v`). Bind mounts from the macOS
+# host into OrbStack raced with the host-side state/ dir recreation, so the
+# store and the proxy certificate live in Docker-managed volumes instead.
+volumes:
+  nb-data:
+  nb-certs:
+
+x-netbird-client-env: &nb-client-env
+  NB_RELAY_TRANSPORT: ws
+  NB_LOG_LEVEL: info
+  NB_FORCE_RELAY: ${NB_FORCE_RELAY:-}
+  NB_WG_KERNEL_DISABLED: ${NB_WG_KERNEL_DISABLED:-}
+
+services:
+  nb-server:
+    image: netbirdio/netbird-server:0.82.0
+    container_name: nb-server${NAME_SUFFIX-}
+    command: ["--config", "/nb/config.yaml"]
+    environment:
+      NB_SETUP_PAT_ENABLED: "true"
+      NB_DISABLE_GEOLOCATION: "true"
+    volumes:
+      - ./config/config.yaml:/nb/config.yaml:ro
+      - nb-data:/nb/data
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.10
+
+  nb-proxy:
+    image: netbirdio/reverse-proxy:0.82.0
+    container_name: nb-proxy${NAME_SUFFIX-}
+    cap_add: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE, NET_BIND_SERVICE]
+    environment:
+      NB_PROXY_TOKEN: ${NB_PROXY_TOKEN:-}
+      NB_PROXY_MANAGEMENT_ADDRESS: http://nb-server:8080
+      NB_PROXY_DOMAIN: bench.test
+      NB_PROXY_ADDRESS: ":443"
+      NB_PROXY_CERTIFICATE_DIRECTORY: /certs
+      NB_PROXY_HEALTH_ADDRESS: ":8081"
+      NB_PROXY_LOG_LEVEL: info
+      # Management is plain HTTP in-cluster.
+      NB_PROXY_ALLOW_INSECURE: "true"
+      # Combined server serves relay over WebSocket on :8080 (no QUIC).
+      NB_RELAY_TRANSPORT: ws
+      # Non-default: the proxy must dial its site peer eagerly. With lazy
+      # connections the site peer stays Idle because nothing wakes the
+      # proxy-side tunnel (the proxy's own dials do not activate it).
+      NB_LAZY_CONN: "off"
+    volumes:
+      - nb-certs:/certs
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.20
+
+  site:
+    image: netbirdio/netbird:0.82.0
+    container_name: site${NAME_SUFFIX-}
+    hostname: site
+    cap_add: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE]
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    environment:
+      <<: *nb-client-env
+      NB_MANAGEMENT_URL: http://nb-server:8080
+      NB_SETUP_KEY: ${SITE_SETUP_KEY:-}
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.30
+      sitelan:
+        ipv4_address: 10.89.${NET_ID:-0}.2
+
+  client:
+    image: netbirdio/netbird:0.82.0
+    container_name: client${NAME_SUFFIX-}
+    hostname: client
+    cap_add: [NET_ADMIN, SYS_ADMIN, SYS_RESOURCE]
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      <<: *nb-client-env
+      NB_MANAGEMENT_URL: http://nb-server:8080
+      NB_SETUP_KEY: ${CLIENT_SETUP_KEY:-}
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.40
+
+  client-tools:
+    image: bench-tools
+    container_name: client-tools${NAME_SUFFIX-}
+    network_mode: "service:client"
+    depends_on: [client]
+    command: ["sleep", "infinity"]
+
+  loadgen:
+    image: bench-tools
+    container_name: loadgen${NAME_SUFFIX-}
+    command: ["sleep", "infinity"]
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.50
+
+  target:
+    image: bench-target
+    container_name: target${NAME_SUFFIX-}
+    networks:
+      sitelan:
+        ipv4_address: 10.89.${NET_ID:-0}.10

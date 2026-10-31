@@ -1,0 +1,148 @@
+name: pg
+
+# Pangolin 1.25.3 bench stack. Subnets are parametrized by NET_ID (default 0):
+#   wan      10.88.<NET_ID>.0/24  (bridge, "internet")
+#   sitelan  10.89.<NET_ID>.0/24  (internal bridge, private site LAN)
+# Container names get NAME_SUFFIX appended (dev: -pgdev). Driven by up.sh/down.sh; no host ports.
+
+services:
+  pangolin:
+    image: fosrl/pangolin:1.25.3
+    container_name: pg-pangolin${NAME_SUFFIX-}
+    restart: unless-stopped
+    environment:
+      SERVER_SECRET: "bench-pangolin-server-secret-not-for-production"
+    volumes:
+      - ./state/pangolin:/app/config
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.6
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
+      interval: "3s"
+      timeout: "3s"
+      retries: 30
+
+  gerbil:
+    image: fosrl/gerbil:1.5.2
+    container_name: pg-gerbil${NAME_SUFFIX-}
+    restart: unless-stopped
+    depends_on:
+      pangolin:
+        condition: service_healthy
+    command:
+      - --reachableAt=http://gerbil:3004
+      - --generateAndSaveKeyTo=/var/config/key
+      - --remoteConfig=http://pangolin:3001/api/v1/
+      - --log-level=DEBUG
+    volumes:
+      - ./state/gerbil:/var/config
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.5
+
+  # Shares gerbil's netns (as upstream compose.example.yaml): public HTTPS entrypoint is 10.88.<NET_ID>.5:443.
+  traefik:
+    image: traefik:v3.7
+    container_name: pg-traefik${NAME_SUFFIX-}
+    restart: unless-stopped
+    network_mode: service:gerbil
+    depends_on:
+      pangolin:
+        condition: service_healthy
+    command:
+      - --configFile=/etc/traefik/traefik_config.yml
+    volumes:
+      - ./config/traefik:/etc/traefik:ro
+      - ./state/traefik/certs:/certs:ro
+
+  # Site connector (newt 1.19.1): wan side for WireGuard/relay, sitelan side for the private LAN.
+  site:
+    image: fosrl/newt:1.19.1
+    container_name: site${NAME_SUFFIX-}
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/bench/newt-entrypoint.sh"]
+    volumes:
+      - ./config/newt-entrypoint.sh:/bench/newt-entrypoint.sh:ro
+    environment:
+      PANGOLIN_ENDPOINT: "http://pangolin:3000"
+      NEWT_ID: "${NEWT_ID:-}"
+      NEWT_SECRET: "${NEWT_SECRET:-}"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+    cap_add:
+      - NET_ADMIN
+    extra_hosts:
+      - "pangolin.bench.test:10.88.${NET_ID:-0}.5"
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.3
+      sitelan:
+        ipv4_address: 10.89.${NET_ID:-0}.2
+
+  # Machine client (olm 1.10.1): TUN + NET_ADMIN, wan only.
+  client:
+    image: fosrl/olm:1.10.1
+    container_name: client${NAME_SUFFIX-}
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/bench/olm-entrypoint.sh"]
+    volumes:
+      - ./config/olm-entrypoint.sh:/bench/olm-entrypoint.sh:ro
+    environment:
+      PANGOLIN_ENDPOINT: "http://pangolin:3000"
+      OLM_ID: "${OLM_ID:-}"
+      OLM_SECRET: "${OLM_SECRET:-}"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+      ENABLE_API: "true"
+      HTTP_ADDR: "127.0.0.1:9452"   # bench evidence: olm status API reachable from client-tools (shared netns)
+      BENCH_RELAY: "${RELAY:-0}"
+      BENCH_BLOCK_DIRECT_TO: "10.88.${NET_ID:-0}.3"   # site wan address; only used when BENCH_RELAY=1
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    extra_hosts:
+      - "pangolin.bench.test:10.88.${NET_ID:-0}.5"
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.4
+
+  # Shares client's netns: benchmark tools run through the olm tunnel.
+  client-tools:
+    image: bench-tools
+    container_name: client-tools${NAME_SUFFIX-}
+    restart: unless-stopped
+    network_mode: "service:client"
+    depends_on:
+      - client
+
+  loadgen:
+    image: bench-tools
+    container_name: loadgen${NAME_SUFFIX-}
+    restart: unless-stopped
+    networks:
+      wan:
+        ipv4_address: 10.88.${NET_ID:-0}.7
+
+  target:
+    image: bench-target
+    container_name: target${NAME_SUFFIX-}
+    restart: unless-stopped
+    networks:
+      sitelan:
+        ipv4_address: 10.89.${NET_ID:-0}.10
+
+networks:
+  wan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.88.${NET_ID:-0}.0/24
+  sitelan:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.89.${NET_ID:-0}.0/24

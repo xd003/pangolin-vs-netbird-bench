@@ -1,0 +1,609 @@
+{
+ "stack": "baseline",
+ "variant": "default",
+ "profile": "lan",
+ "started": "2026-10-30T18:16:20",
+ "up_s": 0.7966768741607666,
+ "containers": [
+  "target",
+  "client-tools"
+ ],
+ "env": {
+  "PRIVATE_TARGET": "10.89.0.10"
+ },
+ "images": {
+  "target": {
+   "image": "bench-target",
+   "size_mb": 226.81152820587158
+  },
+  "client-tools": {
+   "image": "bench-tools",
+   "size_mb": 74.72330284118652
+  }
+ },
+ "client_links": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\\    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n2: eth0@if474: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default \\    link/ether f2:e7:10:90:a3:ac brd ff:ff:ff:ff:ff:ff link-netnsid 0\n",
+ "idle": {
+  "wall_s": 60.1835401058197,
+  "containers": {
+   "target": {
+    "cpu_s": 0.000121,
+    "cpu_cores": 2.010516493168194e-06,
+    "mem_avg_mb": 24.333333333333332,
+    "mem_peak_mb": 24.83984375
+   },
+   "client-tools": {
+    "cpu_s": 0.0,
+    "cpu_cores": 0.0,
+    "mem_avg_mb": 1.53828125,
+    "mem_peak_mb": 1.58984375
+   }
+  },
+  "total_cpu_s": 0,
+  "vm_cpu_s": 1.0499999999999545,
+  "system_cpu_s": 1.0498789999999545
+ },
+ "private": {
+  "reach_s": 0.0737459659576416,
+  "ping": {
+   "raw": [
+    "500 packets transmitted, 500 received, 0% packet loss, time 12208ms",
+    "rtt min/avg/max/mdev = 0.021/0.090/0.184/0.036 ms"
+   ],
+   "loss_pct": 0.0,
+   "min_ms": 0.021,
+   "avg_ms": 0.09,
+   "max_ms": 0.184,
+   "mdev_ms": 0.036
+  },
+  "rtt_udp_idle": {
+   "mode": "udp",
+   "target": "10.89.0.10:7000",
+   "sent": 2000,
+   "received": 2000,
+   "loss_pct": 0,
+   "min_ms": 0.028417,
+   "avg_ms": 0.11748582549999964,
+   "p50_ms": 0.097333,
+   "p90_ms": 0.219418,
+   "p99_ms": 0.290293,
+   "max_ms": 0.361543,
+   "stddev_ms": 0.06325638103665948,
+   "jitter_ms": 0.06203365032516258,
+   "resources": {
+    "wall_s": 22.228252172470093,
+    "containers": {
+     "target": {
+      "cpu_s": 0.15908,
+      "cpu_cores": 0.007156658056858925,
+      "mem_avg_mb": 24.898615056818183,
+      "mem_peak_mb": 24.90234375
+     },
+     "client-tools": {
+      "cpu_s": 0.313553,
+      "cpu_cores": 0.014106057352918575,
+      "mem_avg_mb": 2.7517755681818183,
+      "mem_peak_mb": 2.80859375
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 1.0,
+    "system_cpu_s": 0.5273669999999999
+   }
+  },
+  "rtt_tcp_idle": {
+   "mode": "tcp",
+   "target": "10.89.0.10:7001",
+   "sent": 2000,
+   "received": 2000,
+   "loss_pct": 0,
+   "min_ms": 0.030708,
+   "avg_ms": 0.1199132335000001,
+   "p50_ms": 0.095334,
+   "p90_ms": 0.222376,
+   "p99_ms": 0.287375,
+   "max_ms": 1.346963,
+   "stddev_ms": 0.0708757741080193,
+   "jitter_ms": 0.06048249324662344,
+   "resources": {
+    "wall_s": 20.216274976730347,
+    "containers": {
+     "target": {
+      "cpu_s": 0.146696,
+      "cpu_cores": 0.007256331849900752,
+      "mem_avg_mb": 24.4154296875,
+      "mem_peak_mb": 24.84765625
+     },
+     "client-tools": {
+      "cpu_s": 0.315457,
+      "cpu_cores": 0.015604111062156714,
+      "mem_avg_mb": 2.6298828125,
+      "mem_peak_mb": 2.74609375
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 0.8600000000001273,
+    "system_cpu_s": 0.39784700000012735
+   }
+  },
+  "tcp_connect": {
+   "mode": "connect",
+   "target": "10.89.0.10:80",
+   "sent": 100,
+   "received": 100,
+   "loss_pct": 0,
+   "min_ms": 0.19,
+   "avg_ms": 0.4199400900000002,
+   "p50_ms": 0.431585,
+   "p90_ms": 0.561335,
+   "p99_ms": 0.626752,
+   "max_ms": 0.626752,
+   "stddev_ms": 0.10516300842397909,
+   "jitter_ms": 0.12923063636363635,
+   "resources": {
+    "wall_s": 5.2034759521484375,
+    "containers": {
+     "target": {
+      "cpu_s": 0.01483,
+      "cpu_cores": 0.0028500179757488674,
+      "mem_avg_mb": 23.8046875,
+      "mem_peak_mb": 23.8046875
+     },
+     "client-tools": {
+      "cpu_s": 0.076201,
+      "cpu_cores": 0.014644249478761933,
+      "mem_avg_mb": 2.0651041666666665,
+      "mem_peak_mb": 2.5546875
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 0.2300000000000182,
+    "system_cpu_s": 0.1389690000000182
+   }
+  },
+  "tcp_up_1": {
+   "mbps": 111906.34932170693,
+   "retransmits": 698,
+   "bytes": 436474478592,
+   "all": [
+    111906.3,
+    127457.9,
+    109932.9
+   ],
+   "resources": {
+    "wall_s": 33.28879380226135,
+    "containers": {
+     "target": {
+      "cpu_s": 16.678908,
+      "cpu_cores": 0.5010367182143733,
+      "mem_avg_mb": 23.53503787878788,
+      "mem_peak_mb": 23.6875
+     },
+     "client-tools": {
+      "cpu_s": 20.391445,
+      "cpu_cores": 0.6125618465219002,
+      "mem_avg_mb": 1.9930160984848484,
+      "mem_peak_mb": 2.12890625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 37.840000000000146,
+    "system_cpu_s": 0.7696470000001483
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.001763326466378772,
+   "vm_cpu_s_per_gb": 0.0866946450616453
+  },
+  "tcp_down_1": {
+   "mbps": 110807.93227684652,
+   "retransmits": 1282,
+   "bytes": 476574253056,
+   "all": [
+    110807.9,
+    109775.8,
+    160563.0
+   ],
+   "resources": {
+    "wall_s": 33.25144171714783,
+    "containers": {
+     "target": {
+      "cpu_s": 21.67498,
+      "cpu_cores": 0.6518508335481338,
+      "mem_avg_mb": 23.553030303030305,
+      "mem_peak_mb": 23.57421875
+     },
+     "client-tools": {
+      "cpu_s": 20.143118,
+      "cpu_cores": 0.6057817935037734,
+      "mem_avg_mb": 2.7715435606060606,
+      "mem_peak_mb": 3.15625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 42.33999999999992,
+    "system_cpu_s": 0.5219019999999119
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.0010951116151433923,
+   "vm_cpu_s_per_gb": 0.0888423991193346
+  },
+  "tcp_up_4": {
+   "mbps": 367985.4408704966,
+   "retransmits": 32499,
+   "bytes": 1383983087616,
+   "all": [
+    367985.4,
+    362699.9,
+    376264.7
+   ],
+   "resources": {
+    "wall_s": 33.25602984428406,
+    "containers": {
+     "target": {
+      "cpu_s": 70.681784,
+      "cpu_cores": 2.1253825044948518,
+      "mem_avg_mb": 23.940696022727273,
+      "mem_peak_mb": 24.25
+     },
+     "client-tools": {
+      "cpu_s": 85.054304,
+      "cpu_cores": 2.5575603702021237,
+      "mem_avg_mb": 3.1001420454545454,
+      "mem_peak_mb": 3.515625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 154.25,
+    "system_cpu_s": -1.4860879999999952
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": -0.0010737761272501369,
+   "vm_cpu_s_per_gb": 0.11145367409489487
+  },
+  "tcp_down_4": {
+   "mbps": 311735.06215273443,
+   "retransmits": 42721,
+   "bytes": 1171602276352,
+   "all": [
+    324381.5,
+    311735.1,
+    301206.2
+   ],
+   "resources": {
+    "wall_s": 33.284310817718506,
+    "containers": {
+     "target": {
+      "cpu_s": 88.035225,
+      "cpu_cores": 2.644946608091867,
+      "mem_avg_mb": 24.3125,
+      "mem_peak_mb": 25.15234375
+     },
+     "client-tools": {
+      "cpu_s": 81.860067,
+      "cpu_cores": 2.4594190172152453,
+      "mem_avg_mb": 3.3884943181818183,
+      "mem_peak_mb": 3.6015625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 168.36000000000013,
+    "system_cpu_s": -1.5352919999998562
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": -0.0013104208066070607,
+   "vm_cpu_s_per_gb": 0.14370064261416432
+  },
+  "udp_up_100M": {
+   "target_rate": "100M",
+   "mbps": 100.00086984612423,
+   "jitter_ms": 0.0038445674320997355,
+   "lost_pct": 0,
+   "bytes": 125023200,
+   "resources": {
+    "wall_s": 11.18458890914917,
+    "containers": {
+     "target": {
+      "cpu_s": 0.234345,
+      "cpu_cores": 0.020952491137899765,
+      "mem_avg_mb": 24.918678977272727,
+      "mem_peak_mb": 24.921875
+     },
+     "client-tools": {
+      "cpu_s": 0.802678,
+      "cpu_cores": 0.0717664284776168,
+      "mem_avg_mb": 2.448153409090909,
+      "mem_peak_mb": 2.5078125
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 1.6799999999998363,
+    "system_cpu_s": 0.6429769999998363
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 5.142861484907091,
+   "vm_cpu_s_per_gb": 13.437505998885298
+  },
+  "udp_down_100M": {
+   "target_rate": "100M",
+   "mbps": 100.0020198986011,
+   "jitter_ms": 0.00160979071838598,
+   "lost_pct": 0,
+   "bytes": 125008800,
+   "resources": {
+    "wall_s": 11.200740098953247,
+    "containers": {
+     "target": {
+      "cpu_s": 0.80609,
+      "cpu_cores": 0.07196756579284723,
+      "mem_avg_mb": 24.74502840909091,
+      "mem_peak_mb": 24.75
+     },
+     "client-tools": {
+      "cpu_s": 0.244034,
+      "cpu_cores": 0.02178731028879118,
+      "mem_avg_mb": 2.3284801136363638,
+      "mem_peak_mb": 2.390625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 1.5199999999999818,
+    "system_cpu_s": 0.46987599999998175
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 3.7587433844655878,
+   "vm_cpu_s_per_gb": 12.159143996262518
+  },
+  "udp_up_500M": {
+   "target_rate": "500M",
+   "mbps": 499.979728165495,
+   "jitter_ms": 0.004796377250884319,
+   "lost_pct": 0,
+   "bytes": 625226400,
+   "resources": {
+    "wall_s": 11.226975917816162,
+    "containers": {
+     "target": {
+      "cpu_s": 0.886735,
+      "cpu_cores": 0.07898253336348877,
+      "mem_avg_mb": 24.920454545454547,
+      "mem_peak_mb": 24.92578125
+     },
+     "client-tools": {
+      "cpu_s": 2.922363,
+      "cpu_cores": 0.2602983226642967,
+      "mem_avg_mb": 1.8508522727272727,
+      "mem_peak_mb": 1.9140625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 4.0099999999997635,
+    "system_cpu_s": 0.20090199999976388
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.32132680257865615,
+   "vm_cpu_s_per_gb": 6.413676709748283
+  },
+  "udp_down_500M": {
+   "target_rate": "500M",
+   "mbps": 499.9373668620798,
+   "jitter_ms": 0.00023017835916346374,
+   "lost_pct": 0,
+   "bytes": 624890400,
+   "resources": {
+    "wall_s": 11.222674131393433,
+    "containers": {
+     "target": {
+      "cpu_s": 3.148865,
+      "cpu_cores": 0.2805806319539842,
+      "mem_avg_mb": 23.93075284090909,
+      "mem_peak_mb": 24.91796875
+     },
+     "client-tools": {
+      "cpu_s": 0.957063,
+      "cpu_cores": 0.0852794074562663,
+      "mem_avg_mb": 1.8249289772727273,
+      "mem_peak_mb": 1.94921875
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 4.3400000000001455,
+    "system_cpu_s": 0.23407200000014594
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.37458088650449095,
+   "vm_cpu_s_per_gb": 6.945217913413529
+  },
+  "udp_up_1G": {
+   "target_rate": "1G",
+   "mbps": 1000.1618780250882,
+   "jitter_ms": 0.0005739383165692624,
+   "lost_pct": 0,
+   "bytes": 1250217600,
+   "resources": {
+    "wall_s": 11.207313060760498,
+    "containers": {
+     "target": {
+      "cpu_s": 1.512141,
+      "cpu_cores": 0.13492449008981197,
+      "mem_avg_mb": 23.64453125,
+      "mem_peak_mb": 23.6484375
+     },
+     "client-tools": {
+      "cpu_s": 4.870791,
+      "cpu_cores": 0.43460827529247953,
+      "mem_avg_mb": 2.1754261363636362,
+      "mem_peak_mb": 2.390625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 6.5900000000001455,
+    "system_cpu_s": 0.20706800000014614
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.16562556790125665,
+   "vm_cpu_s_per_gb": 5.271082409974188
+  },
+  "udp_down_1G": {
+   "target_rate": "1G",
+   "mbps": 999.9197570195361,
+   "jitter_ms": 0.0014309848903585867,
+   "lost_pct": 0,
+   "bytes": 1250164800,
+   "resources": {
+    "wall_s": 11.196117877960205,
+    "containers": {
+     "target": {
+      "cpu_s": 4.92726,
+      "cpu_cores": 0.4400864704809348,
+      "mem_avg_mb": 23.683948863636363,
+      "mem_peak_mb": 23.734375
+     },
+     "client-tools": {
+      "cpu_s": 1.473957,
+      "cpu_cores": 0.13164893546731188,
+      "mem_avg_mb": 2.114346590909091,
+      "mem_peak_mb": 2.1796875
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 6.619999999999891,
+    "system_cpu_s": 0.21878299999989004
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.17500332756120635,
+   "vm_cpu_s_per_gb": 5.295301867401714
+  },
+  "rtt_udp_under_load": {
+   "mode": "udp",
+   "target": "10.89.0.10:7000",
+   "sent": 2000,
+   "received": 2000,
+   "loss_pct": 0,
+   "min_ms": 0.021209,
+   "avg_ms": 0.21445980750000032,
+   "p50_ms": 0.0855,
+   "p90_ms": 0.513168,
+   "p99_ms": 2.5883,
+   "max_ms": 3.745053,
+   "stddev_ms": 0.43687347867283893,
+   "jitter_ms": 0.26613981440720347,
+   "resources": {
+    "wall_s": 30.163378953933716,
+    "containers": {
+     "target": {
+      "cpu_s": 83.610825,
+      "cpu_cores": 2.771931656850932,
+      "mem_avg_mb": 24.349609375,
+      "mem_peak_mb": 24.62890625
+     },
+     "client-tools": {
+      "cpu_s": 80.801398,
+      "cpu_cores": 2.678791329161165,
+      "mem_avg_mb": 4.301822916666667,
+      "mem_peak_mb": 5.3671875
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 163.48999999999978,
+    "system_cpu_s": -0.9222230000002298
+   }
+  },
+  "http_1k_c1": {
+   "rps": 117836.3549891088,
+   "success_rate": 1.0,
+   "p50_ms": 0.008042,
+   "p90_ms": 0.008333,
+   "p99_ms": 0.013709,
+   "status": {
+    "200": 1767934
+   },
+   "errors": {
+    "aborted due to deadline": 1
+   },
+   "resources": {
+    "wall_s": 15.256744146347046,
+    "containers": {
+     "target": {
+      "cpu_s": 8.690678,
+      "cpu_cores": 0.5696286125425277,
+      "mem_avg_mb": 24.375,
+      "mem_peak_mb": 24.453125
+     },
+     "client-tools": {
+      "cpu_s": 6.428306,
+      "cpu_cores": 0.42134192841787566,
+      "mem_avg_mb": 112.3935546875,
+      "mem_peak_mb": 208.44140625
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 15.980000000000018,
+    "system_cpu_s": 0.8610160000000171
+   }
+  },
+  "http_1k_c64": {
+   "rps": 550948.0923897537,
+   "success_rate": 1.0,
+   "p50_ms": 0.085584,
+   "p90_ms": 0.211125,
+   "p99_ms": 0.572585,
+   "status": {
+    "200": 8265278
+   },
+   "errors": {
+    "aborted due to deadline": 62
+   },
+   "resources": {
+    "wall_s": 15.778300285339355,
+    "containers": {
+     "target": {
+      "cpu_s": 71.505228,
+      "cpu_cores": 4.531871412438522,
+      "mem_avg_mb": 24.68115234375,
+      "mem_peak_mb": 24.87890625
+     },
+     "client-tools": {
+      "cpu_s": 54.173687,
+      "cpu_cores": 3.433429838468488,
+      "mem_avg_mb": 641.7841796875,
+      "mem_peak_mb": 1233.5234375
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 125.34000000000015,
+    "system_cpu_s": -0.33891499999985797
+   }
+  },
+  "http_100m": {
+   "mbps_total": 100078.8356,
+   "bytes": 314572800,
+   "all": [
+    79967.7,
+    100078.8,
+    106495.0
+   ],
+   "resources": {
+    "wall_s": 0.19137215614318848,
+    "containers": {
+     "target": {
+      "cpu_s": 0.012032,
+      "cpu_cores": 0.06287226022053813,
+      "mem_avg_mb": 24.09375,
+      "mem_peak_mb": 24.09375
+     },
+     "client-tools": {
+      "cpu_s": 0.048007,
+      "cpu_cores": 0.2508567649939639,
+      "mem_avg_mb": 6.7421875,
+      "mem_peak_mb": 6.7421875
+     }
+    },
+    "total_cpu_s": 0,
+    "vm_cpu_s": 0.11999999999989086,
+    "system_cpu_s": 0.05996099999989086
+   },
+   "cpu_s_per_gb": 0.0,
+   "system_cpu_s_per_gb": 0.19061088561977024,
+   "vm_cpu_s_per_gb": 0.38146972656215306
+  }
+ }
+}

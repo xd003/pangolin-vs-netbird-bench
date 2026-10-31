@@ -1,0 +1,40 @@
+# Bench config for Pangolin 1.25.3 (derived from pangolin/config/config.example.yml).
+# Secret comes from env SERVER_SECRET (see compose.yaml).
+gerbil:
+    start_port: 51820
+    clients_start_port: 21820
+    base_endpoint: "pangolin.bench.test"
+
+app:
+    dashboard_url: "https://pangolin.bench.test"
+    log_level: "info"
+    save_logs: false
+    telemetry:
+        anonymous_usage: false
+    notifications:
+        product_updates: false
+        new_releases: false
+
+domains:
+    domain1:
+        base_domain: "bench.test"
+
+server:
+    cors:
+        origins: ["https://pangolin.bench.test"]
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
+        allowed_headers: ["X-CSRF-Token", "Content-Type"]
+        credentials: false
+
+traefik:
+    # No Let's Encrypt in the bench: an empty resolver makes Pangolin emit routers
+    # without certResolver, so Traefik serves the self-signed file-provider cert.
+    cert_resolver: ""
+
+flags:
+    require_email_verification: false
+    disable_signup_without_invite: true
+    disable_user_create_org: false
+    allow_raw_resources: true
+    # Integration API (port 3003, Bearer API keys) is the automation surface used by up.sh.
+    enable_integration_api: true

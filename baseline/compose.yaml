@@ -1,0 +1,15 @@
+name: base
+services:
+  target:
+    image: bench-target
+    container_name: target
+    networks:
+      sitelan: {ipv4_address: 10.89.0.10}
+  client-tools:
+    image: bench-tools
+    container_name: client-tools
+    networks:
+      sitelan: {ipv4_address: 10.89.0.20}
+networks:
+  sitelan:
+    ipam: {config: [{subnet: 10.89.0.0/24}]}
